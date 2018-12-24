@@ -1,0 +1,22 @@
+.user-container {
+  padding: 1rem;
+  background: #eee;
+  margin: 1rem;
+}
+
+.username {
+  font-weight: bolder;
+  font-size: 28px;
+}
+
+.follow-section {
+}
+
+.follow-btn {
+  border: 2px solid #000;
+  margin: 1rem;
+  border-radius: 31px;
+  font-size: 18px;
+  background: #c6c6c6;
+  cursor: pointer;
+}

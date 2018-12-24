@@ -1,0 +1,27 @@
+.has-error {
+  border: 1px solid #f06260;
+}
+
+.has-success {
+  color: #32b67a;
+}
+
+.help-text {
+  color: #f06260;
+}
+
+.input-container {
+  padding: 0.5rem;
+  background: #eee;
+  text-transform: uppercase;
+}
+
+.control-label {
+  padding: 10px 10px 10px 0px;
+}
+
+.btn-login {
+  padding: 0.5rem;
+  margin: 0.5rem 0.5rem;
+  border: 1px solid #000;
+}
