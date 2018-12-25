@@ -135,7 +135,7 @@ const RegisterForm = props => (
                     className="btn btn-register btn-success"
                     disabled={props.registerInProcess}
                   >
-                    <span>register</span>
+                    <span>Register</span>
                   </button>
                 </div>
               </div>

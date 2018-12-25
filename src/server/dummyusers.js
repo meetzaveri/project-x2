@@ -124,7 +124,7 @@ const users = [
           "What do I do? System architecture. Networking and security. No one in this house can touch me on that.  ",
         user_id: "104",
         user_name: "gilfoyle",
-        timestamp: "2018-12-23T07:05:20+05:30"
+        timestamp: "2018-12-23T03:05:20+05:30"
       },
       {
         tweet_id: "210",

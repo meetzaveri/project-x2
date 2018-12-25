@@ -54,9 +54,13 @@ const NewTweetInput = props => {
           <button
             className="tweet-btn"
             onClick={props.localActions.onSubmitTweet}
+            disabled={props.localState.inputRestricted}
           >
             Tweet
           </button>
+        )}
+        {props.localState.inputRestricted && (
+          <div style={{ color: "red" }}>Only 140 characters allowed</div>
         )}
       </div>
     </>

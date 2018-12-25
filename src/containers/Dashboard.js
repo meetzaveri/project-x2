@@ -18,7 +18,8 @@ class Dashboard extends Component {
       toggleTweetInput: false,
       userid: null,
       postingTweetInProcess: false,
-      updateUserInProcess: false
+      updateUserInProcess: false,
+      inputRestricted: false
     };
   }
 
@@ -83,9 +84,14 @@ class Dashboard extends Component {
   };
 
   onChangeTextInput = e => {
+    const { newTweetInput } = this.state;
     const name = e.target.name;
     const value = e.target.value;
-    this.setState({ [name]: value });
+    if (newTweetInput.length > 140) {
+      this.setState({ [name]: value, inputRestricted: true });
+    } else {
+      this.setState({ [name]: value, inputRestricted: false });
+    }
   };
 
   onSubmitTweet = text => {

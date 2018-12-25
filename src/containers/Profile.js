@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import queryString from "query-string";
 import { connect } from "react-redux";
 
+import Routes from "config/routes";
+import { NavLink } from "react-router-dom";
 import { fetchUserAction, updateUser } from "actions/user";
 import ProfileComponent from "components/profile";
 import ErrorBoundary from "wrappers/errorBoundary";
@@ -13,20 +15,20 @@ class Profile extends Component {
       fetchProfileInProcess: false,
       userData: {},
       userUpdate: false,
-      updateUserInProcess: false
+      updateUserInProcess: false,
+      loggedInUserid: null
     };
   }
 
   componentDidMount() {
     const cacheduserid = localStorage.getItem("userid");
     const parseQueryString = queryString.parse(this.props.location.search);
-    const userid = parseQueryString.userid
-      ? parseQueryString.userid
-      : cacheduserid;
+    const userid = parseQueryString.userid;
     const url = "dummyUrl";
     this.props.fetchUserAPI(url, { userid });
     this.setState({
-      fetchProfileInProcess: true
+      fetchProfileInProcess: true,
+      loggedInUserid: cacheduserid
     });
   }
 
@@ -77,7 +79,12 @@ class Profile extends Component {
     return (
       <ErrorBoundary>
         <>
-          <h3>Profile</h3>
+          <NavLink
+            to={Routes.dashboard + "?userid=" + this.state.loggedInUserid}
+          >
+            <h3>Back to dashboard</h3>
+          </NavLink>
+
           <ProfileComponent localState={this.state} localActions={actions} />
         </>
       </ErrorBoundary>
