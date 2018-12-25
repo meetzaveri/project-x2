@@ -5,7 +5,7 @@ import Users from "./dummyusers";
 import Tweets from "./dummytweets";
 
 import { ApiCall } from "config/api";
-import { checkUser, sortByLatestDate } from "utils/utils";
+import { checkUser, sortByLatestDate, extractObjDataById } from "utils/utils";
 
 let dummyTweetCounter = 220;
 let userTweetCounter = 110;
@@ -28,11 +28,14 @@ export const ApiCallForLogin = params => {
 
 export const fetchAndSortTweets = params => {
   return new Promise((resolve, reject) => {
-    const findId = _.findIndex(Users, { user_id: params.user_id });
-    const arrOfUserFollows = Users[findId].user_follows;
-    console.log("arrOfUserFollows", arrOfUserFollows);
+    const extractedUserObj = extractObjDataById(
+      Users,
+      "user_id",
+      params.user_id
+    );
+
     const userSpecificFilterData = Tweets.filter(item =>
-      arrOfUserFollows.includes(item.user_id)
+      extractedUserObj.user_follows.includes(item.user_id)
     );
     // console.log("userSpecificFilterData", userSpecificFilterData);
     const filterByDate = sortByLatestDate(userSpecificFilterData);
@@ -54,16 +57,14 @@ export const addTweet = params => {
       user_name: params.user_name,
       timestamp: moment().format()
     };
-    const findId = _.findIndex(Users, { user_id: params.user_id });
-    Users[findId].user_tweets.push(newTweet);
+    const userData = extractObjDataById(Users, "user_id", params.user_id);
+    userData.user_tweets.push(newTweet);
     Tweets.push(newTweet);
-    console.log("Tweets", Tweets);
     const immutableData = [...Tweets];
-    const arrOfUserFollows = Users[findId].user_follows;
+    const arrOfUserFollows = userData.user_follows;
     const userSpecificFilterData = immutableData.filter(item =>
       arrOfUserFollows.includes(item.user_id)
     );
-    console.log("userSpecificFilterData", userSpecificFilterData);
     const filterByDateTweets = sortByLatestDate(userSpecificFilterData);
     resolve(filterByDateTweets);
   });
@@ -83,21 +84,57 @@ export const fetchUser = params => {
 
 export const followUser = params => {
   return new Promise((resolve, reject) => {
-    const findId = _.findIndex(Users, { user_id: params.user_id });
-    const data = Users[findId];
-    data.user_follows.push(params.toUser);
-    const findIdofFollowedUser = _.findIndex(Users, { user_id: params.toUser });
-    const followedUserData = Users[findIdofFollowedUser];
+    const userData = extractObjDataById(Users, "user_id", params.user_id);
+    userData.user_follows.push(params.toUser);
+
+    const followedUserData = extractObjDataById(
+      Users,
+      "user_id",
+      params.toUser
+    );
     followedUserData.user_followed_by.push(params.user_id);
 
-    const arrOfUserFollows = Users[findId].user_follows;
-    console.log("arrOfUserFollows", arrOfUserFollows);
+    const arrOfUserFollows = userData.user_follows;
     const userSpecificFilterData = Tweets.filter(item =>
       arrOfUserFollows.includes(item.user_id)
     );
     // console.log("userSpecificFilterData", userSpecificFilterData);
     const TweetsFilterByDate = sortByLatestDate(userSpecificFilterData);
-    if (findId === -1) {
+    if (userData === undefined) {
+      reject({ error: "No user profile found" });
+    } else {
+      resolve({ users: Users, tweets: TweetsFilterByDate });
+    }
+  });
+};
+
+export const unFollowUser = params => {
+  return new Promise((resolve, reject) => {
+    const userData = extractObjDataById(Users, "user_id", params.user_id);
+
+    if (userData.user_follows.includes(params.toUser)) {
+      let id = userData.user_follows.indexOf(params.toUser);
+      userData.user_follows.splice(id, 1);
+    }
+
+    const followedUserData = extractObjDataById(
+      Users,
+      "user_id",
+      params.toUser
+    );
+
+    if (followedUserData.user_followed_by.includes(params.user_id)) {
+      let id = followedUserData.user_followed_by.indexOf(params.user_id);
+      followedUserData.user_followed_by.splice(id, 1);
+    }
+
+    const arrOfUserFollows = userData.user_follows;
+    const userSpecificFilterData = Tweets.filter(item =>
+      arrOfUserFollows.includes(item.user_id)
+    );
+    // console.log("userSpecificFilterData", userSpecificFilterData);
+    const TweetsFilterByDate = sortByLatestDate(userSpecificFilterData);
+    if (userData === undefined) {
       reject({ error: "No user profile found" });
     } else {
       resolve({ users: Users, tweets: TweetsFilterByDate });
@@ -108,16 +145,21 @@ export const followUser = params => {
 export const ApiCallForRegister = params => {
   return new Promise((resolve, reject) => {
     let data = params.data;
-
-    const schemaModel = {
-      user_id: ++userTweetCounter,
-      email: data,
-      user_name: data.username,
-      password: data.password,
-      user_follows: [],
-      user_followed_by: [],
-      user_tweets: []
-    };
-    Users.push(schemaModel);
+    const findId = _.findIndex(Users, { email: data.email });
+    if (findId !== -1) {
+      reject({ alreadyRegistered: true });
+    } else {
+      const schemaModel = {
+        user_id: JSON.stringify(++userTweetCounter),
+        email: data.email,
+        user_name: data.username,
+        password: data.password,
+        user_follows: [],
+        user_followed_by: [],
+        user_tweets: []
+      };
+      Users.push(schemaModel);
+      resolve({ registerSuccess: true });
+    }
   });
 };

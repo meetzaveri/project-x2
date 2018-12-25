@@ -23,3 +23,8 @@ export function sortByLatestDate(arr) {
   console.log("sortedData", sortedData);
   return sortedData;
 }
+
+export function extractObjDataById(arr, key, value) {
+  const findId = _.findIndex(arr, { [key]: value });
+  return arr[findId];
+}

@@ -1,4 +1,4 @@
-import { fetchUser, followUser } from "server/operations";
+import { fetchUser, followUser, unFollowUser } from "server/operations";
 
 export function fetchUserDataError(bool, error) {
   return {
@@ -91,7 +91,7 @@ export function updateUser(url, formData, action) {
           dispatch(udpateUserInProcess(false));
         });
     } else if (action === "unfollow") {
-      followUser({ user_id: formData.userid, toUser: formData.userToFollow })
+      unFollowUser({ user_id: formData.userid, toUser: formData.userToFollow })
         .then(responseJson => {
           console.log("dummy response user update api", responseJson);
           setTimeout(() => {
