@@ -72,15 +72,21 @@ const WhomToFollow = props => {
     item => (
       <>
         <div>
-          <div className="dib">{item.user_name}</div>
-          <div className="dib">
+          <div className="dib user-col">{item.user_name}</div>
+          <div className="dib user-follow-col">
             {currentUserData &&
             item.user_followed_by.includes(currentUserData.user_id) ? (
-              <button onClick={() => props.localActions.unfollowUser(item)}>
+              <button
+                className="follow-btn"
+                onClick={() => props.localActions.unfollowUser(item)}
+              >
                 Following
               </button>
             ) : (
-              <button onClick={() => props.localActions.followUser(item)}>
+              <button
+                className="follow-btn"
+                onClick={() => props.localActions.followUser(item)}
+              >
                 Follow
               </button>
             )}
@@ -103,7 +109,7 @@ const Dashboard = props => {
         </div>
         <div className="dasboard-sidebar dib v-top">
           {" "}
-          Users to follow
+          <h3>Who to follow</h3>
           <WhomToFollow {...props} />
         </div>
       </div>

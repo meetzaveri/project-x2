@@ -9,7 +9,7 @@ import { login, resetLogin } from "actions/auth";
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { loginInProcess: false };
+    this.state = { loginInProcess: false, setLoginError: null };
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -19,6 +19,10 @@ class Login extends Component {
         Routes.dashboard + "?userid=" + props.auth.response.user_id
       );
       return { loginInProcess: false };
+    }
+    console.log("props.auth", props.auth);
+    if (props.auth.hasError === true && loginInProcess === true) {
+      return { loginInProcess: false, setLoginError: props.auth.error };
     }
     return null;
   }
@@ -31,18 +35,25 @@ class Login extends Component {
     this.setState({ loginInProcess: true });
   };
 
+  navigateToRegister = () => {
+    this.props.history.replace(Routes.register);
+  };
+
   componentWillUnmount() {
     this.props.resetLoginState();
   }
 
   render() {
-    const { onSubmitForm } = this;
-    const localActions = { onSubmitForm };
+    const { onSubmitForm, navigateToRegister } = this;
+    const localActions = { onSubmitForm, navigateToRegister };
     return (
       <ErrorBoundary>
         <>
           <div>
-            <LoginComponent localActions={localActions} />
+            <LoginComponent
+              localActions={localActions}
+              localState={this.state}
+            />
           </div>
         </>
       </ErrorBoundary>

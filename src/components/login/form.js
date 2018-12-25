@@ -45,6 +45,9 @@ const LoginForm = props => (
           }) => (
             <form onSubmit={handleSubmit}>
               <div className="form-content">
+                {props.localState.setLoginError && (
+                  <div>Error : {props.localState.setLoginError}</div>
+                )}
                 <div
                   className={`input-container ${!errors.email &&
                     touched.email &&
@@ -104,9 +107,15 @@ const LoginForm = props => (
                     type="submit"
                     id="loginButton"
                     className="btn btn-login btn-success"
-                    disabled={props.loginInProcess}
                   >
                     <span>LOGIN</span>
+                  </button>
+                  <button
+                    id="registerButton"
+                    className="btn btn-login btn-success"
+                    onClick={props.localActions.navigateToRegister}
+                  >
+                    <span>REGISTER</span>
                   </button>
                 </div>
               </div>

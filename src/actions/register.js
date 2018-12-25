@@ -1,9 +1,9 @@
 import { ApiCallForRegister } from "server/operations";
 
-export function registrationHasError(bool, error) {
+export function registrationHasError(error) {
   return {
     type: "REGISTRATION_ERROR",
-    hasError: bool,
+    hasError: true,
     error
   };
 }

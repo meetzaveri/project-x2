@@ -1,9 +1,9 @@
 import { ApiCallForLogin } from "server/operations";
 
-export function loginHasError(bool, error) {
+export function loginHasError(error) {
   return {
     type: "LOGIN_ERROR",
-    hasError: bool,
+    hasError: true,
     error
   };
 }

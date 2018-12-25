@@ -59,3 +59,28 @@
 
   top: 0;
 }
+
+.logout button {
+  border: 1px solid;
+  background: #ff6868;
+  padding: 5px;
+  margin: 10px;
+  font-size: 20px;
+}
+
+.user-col {
+  width: 70px;
+}
+
+.user-follow-col {
+  width: 70px;
+}
+
+.follow-btn {
+  border: 2px solid #000;
+  margin: 1rem;
+  border-radius: 31px;
+  font-size: 18px;
+  background: #c6c6c6;
+  cursor: pointer;
+}
