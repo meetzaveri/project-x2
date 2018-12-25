@@ -60,6 +60,7 @@ const users = [
     user_id: "102",
     user_name: "edchen",
     email: "edchen@mailinator.com",
+    password: "admin",
     user_follows: ["100", "102", "101", "103", "104"],
 
     user_followed_by: [],
