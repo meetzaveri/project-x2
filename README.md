@@ -8,7 +8,7 @@ Install dependencies
 
 Start local server for frontend
 
-`npm start`
+`npm run start`
 
 
 ## Login Credentials for dummy users
