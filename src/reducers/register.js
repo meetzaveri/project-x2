@@ -1,4 +1,4 @@
-export function auth_login(state = {}, action) {
+export function register(state = {}, action) {
   switch (action.type) {
     case "REGISTRATION_ERROR":
       state = {
@@ -12,7 +12,10 @@ export function auth_login(state = {}, action) {
       return action.inProcess;
 
     case "REGISTRATION_SUCCESS":
-      console.log("responseToBeSend", action.registrationResponse);
+      console.log(
+        "responseToBeSend register action",
+        action.registrationResponse
+      );
       state = {
         ...state,
         registrationAccess: true,

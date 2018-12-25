@@ -7,7 +7,7 @@ const RegistrationSchema = Yup.object().shape({
   email: Yup.string()
     .email("Please enter a vaild email")
     .required("Email is required"),
-  username: Yup.string().required("Email is required"),
+  username: Yup.string().required("Username is required"),
   password: Yup.string()
     .min(3, "Password must be between 3 to 30 characters.")
     .max(20, "Password must be between 3 to 30 characters.")
@@ -23,12 +23,13 @@ const RegisterForm = props => (
         <Formik
           initialValues={{
             email: "",
-            password: ""
+            password: "",
+            username: ""
           }}
           validationSchema={RegistrationSchema}
           onSubmit={values => {
             // same shape as initial values
-            // console.log("onsubmit render props formik", values);
+            console.log("onsubmit render props formik", values);
             props.localActions.onSubmitForm(values);
           }}
         >
@@ -46,12 +47,13 @@ const RegisterForm = props => (
           }) => (
             <form onSubmit={handleSubmit}>
               <div className="form-content">
+                {props.localState.isUserAlreadyRegistered && (
+                  <div>Error : User already registered with this email</div>
+                )}
                 <div
-                  className={`input-container ${!errors.username &&
+                  className={`input-container ${errors.username &&
                     touched.username &&
-                    "has-success"} ${errors.username &&
-                    touched.username &&
-                    ""}`}
+                    ""} ${errors.username && touched.username && ""}`}
                   id="register-email-wrapper"
                 >
                   <label className={`control-label`}>Username</label>
@@ -77,7 +79,7 @@ const RegisterForm = props => (
                 <div
                   className={`input-container ${!errors.email &&
                     touched.email &&
-                    "has-success"} ${errors.email && touched.email && ""}`}
+                    ""} ${errors.email && touched.email && ""}`}
                   id="register-email-wrapper"
                 >
                   <label className={`control-label`}>email address</label>
@@ -102,9 +104,7 @@ const RegisterForm = props => (
                 <div
                   className={`input-container ${!errors.password &&
                     touched.password &&
-                    "has-success"}  ${errors.password &&
-                    touched.password &&
-                    ""}`}
+                    ""}  ${errors.password && touched.password && ""}`}
                   id="register-password-wrapper"
                 >
                   <label className={`control-label`}>password</label>

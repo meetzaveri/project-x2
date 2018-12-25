@@ -4,18 +4,27 @@ import { connect } from "react-redux";
 import Routes from "config/routes";
 import ErrorBoundary from "wrappers/errorBoundary";
 import RegisterComponent from "components/register";
-import { login, resetLogin } from "actions/auth";
+import { register, resetRegistration } from "actions/register";
 
 class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = { registrationProcess: false };
+    this.state = { registrationProcess: false, isUserAlreadyRegistered: false };
   }
 
   static getDerivedStateFromProps(props, state) {
     const { registrationProcess } = state;
-    if (props.auth.loginAccess === true && registrationProcess === true) {
+    if (
+      props.register.registrationAccess === true &&
+      registrationProcess === true
+    ) {
       props.history.push(Routes.login);
+      return { registrationProcess: false };
+    }
+    if (props.register.hasError === true && registrationProcess === true) {
+      if (props.register.error.alreadyRegistered) {
+        return { isUserAlreadyRegistered: true, registrationProcess: false };
+      }
       return { registrationProcess: false };
     }
     return null;
@@ -25,12 +34,12 @@ class Register extends Component {
     console.log("on submit form values", values);
     const url = "DummyUrl";
     const formData = values;
-    this.props.loginAPI(url, formData);
+    this.props.registerAPI(url, formData);
     this.setState({ registrationProcess: true });
   };
 
   componentWillUnmount() {
-    this.props.resetLoginState();
+    this.props.resetRegistrationState();
   }
 
   render() {
@@ -40,7 +49,10 @@ class Register extends Component {
       <ErrorBoundary>
         <>
           <div>
-            <RegisterComponent localActions={localActions} />
+            <RegisterComponent
+              localActions={localActions}
+              localState={this.state}
+            />
           </div>
         </>
       </ErrorBoundary>
@@ -50,14 +62,14 @@ class Register extends Component {
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth_login
+    register: state.register
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    loginAPI: (url, formData) => dispatch(login(url, formData)),
-    resetLoginState: () => dispatch(resetLogin())
+    registerAPI: (url, formData) => dispatch(register(url, formData)),
+    resetRegistrationState: () => dispatch(resetRegistration())
   };
 };
 
