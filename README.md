@@ -1,5 +1,15 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Twitter clone
+- User can login/register
+- Can follow user(s) 
+- Tweets to be sorted via latest one
+
+## Tech Stack
+- Dummy backend (JSON)
+- State management : Redux and redux thunk
+- UI framework : React
+
 ## Steps to run this project
 
 Install dependencies
