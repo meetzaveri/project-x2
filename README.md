@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Twitter clone
+# Twitter clone
 - User can login/register
 - Can follow user(s) 
 - Tweets to be sorted via latest one
